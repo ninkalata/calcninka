@@ -1,0 +1,10 @@
+C:\Users\jagadesh\source\repos\calculatorsimple\calculatorsimple\bin\Debug\calculatorsimple.exe.config
+C:\Users\jagadesh\source\repos\calculatorsimple\calculatorsimple\bin\Debug\calculatorsimple.exe
+C:\Users\jagadesh\source\repos\calculatorsimple\calculatorsimple\bin\Debug\calculatorsimple.pdb
+C:\Users\jagadesh\source\repos\calculatorsimple\calculatorsimple\obj\Debug\calculatorsimple.Form1.resources
+C:\Users\jagadesh\source\repos\calculatorsimple\calculatorsimple\obj\Debug\calculatorsimple.Properties.Resources.resources
+C:\Users\jagadesh\source\repos\calculatorsimple\calculatorsimple\obj\Debug\calculatorsimple.csproj.GenerateResource.cache
+C:\Users\jagadesh\source\repos\calculatorsimple\calculatorsimple\obj\Debug\calculatorsimple.csproj.CoreCompileInputs.cache
+C:\Users\jagadesh\source\repos\calculatorsimple\calculatorsimple\obj\Debug\calculatorsimple.exe
+C:\Users\jagadesh\source\repos\calculatorsimple\calculatorsimple\obj\Debug\calculatorsimple.pdb
+C:\Users\jagadesh\source\repos\calculatorsimple\calculatorsimple\obj\Debug\calculatorsimple.csprojAssemblyReference.cache
