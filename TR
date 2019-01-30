@@ -1,4 +1,142 @@
-  }
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+
+namespace notepadnin
+{
+    public partial class Form1 : Form
+    {
+        private bool isFileAlreadySaved;
+        private bool isFileDirty;
+        private string currOpenFile;
+       public int index;
+       public static string FindText;
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        public void notepad_TextChanged(object sender, EventArgs e)
+        {
+            isFileDirty=true;
+
+             undoToolStripMenuItem.Enabled = true;
+             toolStripStatusLabel1.Text = "Line: " + (notepad.GetLineFromCharIndex(Int32.MaxValue) + 1) + "   Cols: " + notepad.Text.Length;
+             //notepad.Text =FindText;
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //notepad.Clear();
+            if (notepad.Text!=" ")
+            {
+               //tybvg5y DialogResult dr = MessageBox.Show("Do you want to save the file before exiting", "unsaved file", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult result = MessageBox.Show("Do you want to save your change?", "File Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
+           switch(result)
+           {
+               case DialogResult.Yes:
+                   SaveAsFile();
+                   break;
+               case DialogResult.No:
+                   clearScreen();
+                   break;
+            }
+            }
+            else
+                clearScreen();
+            isFileAlreadySaved = false;
+            currOpenFile="";
+
+            toolStripStatusLabel1.Text = "New file ";
+        }
+       
+        
+        
+        private void clearScreen()
+        {
+            notepad.Clear();
+            this.Text = "Untitled-Notepad";
+            isFileDirty = false;
+        }
+            
+        
+
+
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+           // openFileDialog1.ShowDialog();
+          //  String file = openFileDialog1.FileName;
+          // StreamReader sr = new StreamReader(file);
+          // notepad.Text = sr.ReadToEnd();
+           // sr.Close();
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "Text Files|*.txt|All Files|*.*| Rich Text Format (*.rtf)|*.rtf";
+            DialogResult result = open.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                if (Path.GetExtension(open.FileName) == ".txt")
+                    notepad.LoadFile(open.FileName, RichTextBoxStreamType.PlainText);
+                if (Path.GetExtension(open.FileName) == ".rtf")
+                    notepad.LoadFile(open.FileName, RichTextBoxStreamType.RichText);
+                this.Text = Path.GetFileName(open.FileName) + "-NotePad";
+                isFileAlreadySaved=true;
+                isFileDirty=false;
+                currOpenFile=" ";
+                toolStripStatusLabel1.Text = "Open file ";
+
+            }
+        
+         }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+         //   SaveFileDialog sfd = new SaveFileDialog();  
+           // sfd.Title = "Save As";
+
+           // sfd.Filter = "Text Files|*.txt|All Files|*.*";      
+
+            //sfd.DefaultExt = "txt";//applied default extension    
+
+         //   if (sfd.ShowDialog() == DialogResult.OK)
+          //  {
+
+              
+
+             
+              
+
+               // {
+
+                  //  notepad.SaveFile(sfd.FileName, RichTextBoxStreamType.PlainText);
+
+                 //   this.Text = sfd.FileName;
+
+                        
+
+              //  }      
+          //  }
+            SaveFile();
+            
+        }
         private void SaveFile()
         {
             if (isFileAlreadySaved)
@@ -24,3 +162,279 @@
                 }
             }
         }
+
+
+        
+
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SaveAsFile();
+
+        
+        }
+        private void SaveAsFile()
+    {
+                    
+            SaveFileDialog sv = new SaveFileDialog();
+            sv.Filter = "Text Files(*.txt)|*.txt| Rich Text Format (*.rtf)|*.rtf";
+            DialogResult result = sv.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                if (Path.GetExtension(sv.FileName) == ".txt")
+                    notepad.SaveFile(sv.FileName, RichTextBoxStreamType.PlainText);
+                if (Path.GetExtension(sv.FileName) == ".rtf")
+                    notepad.SaveFile(sv.FileName, RichTextBoxStreamType.RichText);
+                this.Text = Path.GetFileName(sv.FileName) + "-NotePad";
+                isFileAlreadySaved = true;
+                isFileDirty = false;
+                currOpenFile = " ";
+                toolStripStatusLabel1.Text = "save file ";
+
+            }
+}
+
+
+
+               
+
+        private void pageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+          
+           //pageSetupDialog1.ShowDialog();
+          //  pageSetupDialog1.Document = printDocument1;
+
+            pageSetupDialog1.ShowDialog();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (notepad.Modified == true)
+            {
+
+                DialogResult dr = MessageBox.Show("Do you want to save the file before exiting", "unsaved file", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (dr == DialogResult.Yes)
+                {
+
+                    SaveAsFile();
+
+                    notepad.Modified = false;
+
+                    Application.Exit();
+
+                }
+
+                else
+                {
+
+                    notepad.Modified = false;
+
+                    Application.Exit();
+
+                }
+
+            }      
+               
+                }
+
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notepad.Undo();
+            redoToolStripMenuItem.Enabled = true;
+            undoToolStripMenuItem.Enabled = true;
+        }
+
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notepad.Cut();
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notepad.Copy();
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notepad.Paste();
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notepad.Clear();
+        }
+
+        private void redoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notepad.Redo();
+            redoToolStripMenuItem.Enabled = false;
+            undoToolStripMenuItem.Enabled = true;
+        }
+
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notepad.SelectAll();
+        }
+
+        private void timeDataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notepad.Text = System.DateTime.Now.ToString();
+        }
+
+        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //fontDialog1.ShowDialog();
+           // notepad.Font = fontDialog1.Font;
+          //  fontDialog1.Color = notepad.SelectionColor;
+           // notepad.SelectionColor = fontDialog1.Color; 
+            FontDialog fd = new FontDialog();
+            notepad.Font = fd.Font;
+            fd.ShowColor = true;
+           // fd.Font = notepad.SelectionFont;
+
+          //  fd.Color = notepad.SelectionColor;
+
+            if (fd.ShowDialog() == DialogResult.OK)
+            {
+                if (notepad.SelectionLength > 0)
+                {
+
+                    notepad.SelectionFont = fd.Font;
+
+                    notepad.SelectionColor = fd.Color;
+                }
+            }
+        }
+
+        private void fontDialog1_Apply(object sender, EventArgs e)
+        {
+
+        }
+
+        private void findToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            findform Formobj = new findform();
+
+            Formobj.ShowDialog(this);
+            MessageBox.Show(FindText);
+            
+        }
+
+    
+        
+
+        private void colorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog cr = new ColorDialog();
+          
+            if (cr.ShowDialog() == DialogResult.OK)
+            {
+
+                notepad.BackColor = cr.Color;
+
+            }
+            //  fontDialog1.Color = notepad.SelectionColor;
+            // notepad.SelectionColor = fontDialog1.Color; 
+        }
+
+        private void findAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void wordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (wordToolStripMenuItem.Checked == false)
+            {
+
+                wordToolStripMenuItem.Checked = true;
+
+                notepad.WordWrap = true;
+
+            }
+
+            else
+            {
+
+                wordToolStripMenuItem.Checked = false;
+
+                notepad.WordWrap = false;
+
+            }
+        }
+
+        private void statusBarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+        }
+       
+
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void viewHELPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Options:\n\nFile Open : Press 'CTRL + O'\nFile Save : Press 'CTRL + S'\nCut : Press 'CTRL + X'\nCopy : Press 'CTRL + C'\nPaste : Press 'CTRL + V'\n");
+        }
+
+        private void statusBar1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (!wordToolStripMenuItem.Checked)
+            {
+                statusBarToolStripMenuItem.Checked = !statusBarToolStripMenuItem.Checked;
+                if (statusBarToolStripMenuItem.Checked)
+                {
+
+                    statusBar1.Visible = true;
+
+                }
+                else
+                {
+
+                    statusBar1.Visible = false;
+                }
+            }
+        }
+
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        {
+          
+           
+        }
+        public void Goto(int line)//Goto line function to navigate user to line number   
+        {
+
+            index = notepad.GetFirstCharIndexFromLine(line - 1);
+
+            notepad.Select(index, 0);
+
+            notepad.Focus();
+
+        }
+
+        private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (notepad.Modified)
+            {
+                findToolStripMenuItem.Enabled = undoToolStripMenuItem.Enabled = true;
+
+            }   
+        }
+            }
+ //private void EnableDisableUndoRedoProcess(bool enabled)
+//{           redoToolStripMenuItem.Enabled = enabled;
+ //           undoToolStripMenuItem.Enabled = enabled;
+//}
+     
+        }
+              
+
+     
