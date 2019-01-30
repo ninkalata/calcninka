@@ -1,0 +1,26 @@
+  }
+        private void SaveFile()
+        {
+            if (isFileAlreadySaved)
+            {
+                if (Path.GetExtension(currOpenFile) == ".txt")
+                    notepad.SaveFile(currOpenFile, RichTextBoxStreamType.PlainText);
+                if (Path.GetExtension(currOpenFile) == ".rtf")
+                    notepad.SaveFile(currOpenFile, RichTextBoxStreamType.RichText);
+                isFileDirty = false;
+
+            }
+            else
+            {
+
+                if (isFileDirty)
+                {
+                    SaveAsFile();
+                    toolStripStatusLabel1.Text = "save file ";
+                }
+                else
+                {
+                    clearScreen();
+                }
+            }
+        }
